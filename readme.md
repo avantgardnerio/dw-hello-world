@@ -18,6 +18,7 @@ mvn install
 - [x] [Start DropWizard with default config](https://stackoverflow.com/questions/49262060/start-dropwizard-with-config-yaml-from-resources)
 - [x] [Serve react app as static resource from DropWizard](https://spin.atomicobject.com/2014/10/11/serving-static-assets-with-dropwizard/)
 - [x] Add WebDriver tests with Chrome headless in CircleCI
+- [x] Add CRUD endpoints without database
 - [ ] Make fetch calls from client to DropWizard API
 - [ ] Add a PostGreSQL database
 - [ ] Add Flyway migrations
