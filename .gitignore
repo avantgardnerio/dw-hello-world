@@ -6,3 +6,9 @@
 
 # maven
 dependency-reduced-pom.xml
+
+# node
+node_modules/
+package-lock.json
+npm/cache/
+src/main/resources/static
