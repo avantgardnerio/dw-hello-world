@@ -25,6 +25,7 @@ public class BrowserTest {
         options.addArguments("--headless");
         options.addArguments("--no-sandbox");
         options.addArguments("--disable-gpu");
+        options.addArguments("--enable-logging");
 
         DesiredCapabilities dc = new DesiredCapabilities();
         dc.setJavascriptEnabled(true);
