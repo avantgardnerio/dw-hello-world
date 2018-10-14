@@ -14,7 +14,7 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 
 import static org.openqa.selenium.support.ui.ExpectedConditions.presenceOfElementLocated;
 
-public class Uat {
+public class BrowserTest {
 
     private static WebDriver driver;
     private static HelloWorldApplication app;
@@ -53,6 +53,6 @@ public class Uat {
 
         // assert
         WebElement link = driver.findElement(By.cssSelector("a"));
-        Assert.assertEquals(link.getText(), "Learn React");
+        Assert.assertEquals(link.getText(), "Learn React2");
     }
 }
