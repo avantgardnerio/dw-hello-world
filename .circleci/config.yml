@@ -9,11 +9,11 @@ jobs:
     working_directory: ~/repo
     environment:
       # Customize the JVM maximum heap limit
-      MAVEN_OPTS: -Xmx3200m
+      #MAVEN_OPTS: -Xmx3200m
     steps:
     - checkout
     - run:
-        name: install
+        name: install node
         command: |
           curl -o- https://raw.githubusercontent.com/creationix/nvm/v0.33.11/install.sh | bash
           export NVM_DIR="$HOME/.nvm"
@@ -23,6 +23,15 @@ jobs:
           node --version
           npm --version
           echo 'export PATH=$HOME/.nvm/versions/node/v10.4.1/bin/:$PATH' >> $BASH_ENV
+    - run:
+        name: install chrome
+        command: |
+          sudo apt-get update
+          sudo apt-get install -y libgtk2.0-0 libxtst6 libxss1 libgconf-2-4 libnss3 libasound2 chromedriver lsb-release libappindicator3-1
+          sudo wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
+          sudo dpkg -i google-chrome-stable_current_amd64.deb
+          google-chrome-stable --version
+          chromedriver --version
     # Download and cache dependencies
     - restore_cache:
         keys:
@@ -35,4 +44,4 @@ jobs:
         - ~/.m2
         key: v1-dependencies-{{ checksum "pom.xml" }}
     # run tests!
-    - run: mvn integration-test
+    - run: mvn verify

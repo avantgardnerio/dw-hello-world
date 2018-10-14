@@ -10,6 +10,8 @@
 
     <properties>
         <dropwizard.version>1.3.5</dropwizard.version>
+        <selenium.version>3.14.0</selenium.version>
+        
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
     </properties>
@@ -31,6 +33,37 @@
             <artifactId>junit</artifactId>
             <version>4.12</version>
             <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.seleniumhq.selenium</groupId>
+            <artifactId>selenium-chrome-driver</artifactId>
+            <version>${selenium.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.seleniumhq.selenium</groupId>
+            <artifactId>selenium-support</artifactId>
+            <version>${selenium.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.seleniumhq.selenium</groupId>
+            <artifactId>selenium-remote-driver</artifactId>
+            <version>${selenium.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.seleniumhq.selenium</groupId>
+            <artifactId>selenium-api</artifactId>
+            <version>${selenium.version}</version>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.seleniumhq.selenium</groupId>
+            <artifactId>selenium-htmlunit-driver</artifactId>
+            <version>2.52.0</version>
         </dependency>
     </dependencies>
 
@@ -145,51 +178,13 @@
                         <goals>
                             <goal>exec</goal>
                         </goals>
-                        <phase>compile</phase>
+                        <phase>generate-sources</phase>
                         <configuration>
                             <executable>npm</executable>
                             <basedir>client/</basedir>
                             <arguments>
                                 <argument>run</argument>
                                 <argument>build</argument>
-                            </arguments>
-                        </configuration>
-                    </execution>
-
-                    <!-- Optional: The following runs the script that copies the
-                         appropriate files from the npm build directory into the location
-                             'maven-war-plugin' is expecting.  The copying could be done
-                             during the 'build' script, but I like to keep it separate.
-                             Idealy in the future, I won't need maven at which, I can just
-                             delete the 'prepare-for-maven-war' script. -->
-                    <execution>
-                        <id>npm run prepare-for-maven (prepare-package)</id>
-                        <goals>
-                            <goal>exec</goal>
-                        </goals>
-                        <phase>prepare-package</phase>
-                        <configuration>
-                            <executable>npm</executable>
-                            <basedir>client/</basedir>
-                            <arguments>
-                                <argument>run</argument>
-                                <argument>prepare-for-maven-war</argument>
-                            </arguments>
-                        </configuration>
-                    </execution>
-
-                    <!-- Optional: The following will publish to npm if you run
-                         `mvn deploy`. -->
-                    <execution>
-                        <id>npm run publish (deploy)</id>
-                        <goals>
-                            <goal>exec</goal>
-                        </goals>
-                        <phase>deploy</phase>
-                        <configuration>
-                            <executable>npm</executable>
-                            <arguments>
-                                <argument>publish</argument>
                             </arguments>
                         </configuration>
                     </execution>
