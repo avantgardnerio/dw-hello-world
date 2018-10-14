@@ -3,3 +3,6 @@
 *.ipr
 *.iml
 *.iws
+
+# maven
+dependency-reduced-pom.xml
