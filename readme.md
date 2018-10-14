@@ -15,7 +15,7 @@ mvn install
 - [x] [Install npm in CircleCI](https://circleci.com/docs/2.0/using-shell-scripts/)
 - [x] Add readme
 - [ ] Start DropWizard with default config
-- [ ] Serve react app as static resource from DropWizard
+- [x] Serve react app as static resource from DropWizard
 - [ ] Add WebDriver tests with Chrome headless in CircleCI
 - [ ] Make fetch calls from client to DropWizard API
 - [ ] Add a PostGreSQL database
