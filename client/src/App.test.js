@@ -8,8 +8,4 @@ describe('The App component', () => {
         ReactDOM.render(<App/>, div);
         ReactDOM.unmountComponentAtNode(div);
     });
-
-    it('has a canary test', () => {
-        expect(true).toBe(false);
-    });
 });
