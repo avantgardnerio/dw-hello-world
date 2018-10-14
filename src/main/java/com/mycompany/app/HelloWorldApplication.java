@@ -38,7 +38,7 @@ public class HelloWorldApplication extends Application<HelloWorldConfiguration> 
                 new TemplateHealthCheck(configuration.getTemplate());
         environment.healthChecks().register("template", healthCheck);
         
-        final HelloWorldResource resource = new HelloWorldResource(
+        final JobsResource resource = new JobsResource(
                 configuration.getTemplate(),
                 configuration.getDefaultName()
         );
