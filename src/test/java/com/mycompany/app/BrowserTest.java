@@ -27,6 +27,7 @@ public class BrowserTest {
         options.addArguments("--disable-gpu");
         options.addArguments("--enable-logging");
         options.addArguments("--v=1");
+        options.addArguments("--enable-logging=stderr");
 
         DesiredCapabilities dc = new DesiredCapabilities();
         dc.setJavascriptEnabled(true);
