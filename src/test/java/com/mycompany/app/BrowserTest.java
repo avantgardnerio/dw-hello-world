@@ -49,7 +49,7 @@ public class BrowserTest {
     public void pageShouldRender() {
         // setup & exercise
         driver.get("http://127.0.0.1:8080/index.html");
-        new WebDriverWait(driver, 3).until(presenceOfElementLocated(By.cssSelector(".App")));
+        new WebDriverWait(driver, 5).until(presenceOfElementLocated(By.cssSelector(".App")));
 
         // assert
         WebElement link = driver.findElement(By.cssSelector("a"));
