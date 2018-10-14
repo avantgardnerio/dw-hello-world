@@ -200,6 +200,7 @@
                         <phase>test</phase>
                         <configuration>
                             <executable>npm</executable>
+                            <basedir>client/</basedir>
                             <arguments>
                                 <argument>run</argument>
                                 <argument>test</argument>
