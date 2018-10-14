@@ -3,6 +3,7 @@
 ## dev setup
 
 ```bash
+brew cask install chromedriver
 git clone
 mvn install
 ```
@@ -14,9 +15,9 @@ mvn install
 - [x] [Link builds](https://gist.github.com/phillipgreenii/7c954e3c3911e5c32bd0)
 - [x] [Install npm in CircleCI](https://circleci.com/docs/2.0/using-shell-scripts/)
 - [x] Add readme
-- [ ] Start DropWizard with default config
-- [x] Serve react app as static resource from DropWizard
-- [ ] Add WebDriver tests with Chrome headless in CircleCI
+- [x] [Start DropWizard with default config](https://stackoverflow.com/questions/49262060/start-dropwizard-with-config-yaml-from-resources)
+- [x] [Serve react app as static resource from DropWizard](https://spin.atomicobject.com/2014/10/11/serving-static-assets-with-dropwizard/)
+- [x] Add WebDriver tests with Chrome headless in CircleCI
 - [ ] Make fetch calls from client to DropWizard API
 - [ ] Add a PostGreSQL database
 - [ ] Add Flyway migrations
