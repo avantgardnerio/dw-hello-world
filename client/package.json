@@ -9,7 +9,7 @@
   },
   "scripts": {
     "start": "react-scripts start",
-    "build": "rm -rf ../src/main/resources/static && react-scripts build && mv build ../src/main/resources/static",
+    "build": "echo --------build------- && pwd && ls -l && rm -rf ../src/main/resources/static && react-scripts build && mv build ../src/main/resources/static",
     "prepare-for-maven-war": "",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
