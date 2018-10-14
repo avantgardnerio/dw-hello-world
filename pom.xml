@@ -204,8 +204,6 @@
                             <arguments>
                                 <argument>run</argument>
                                 <argument>test</argument>
-                                <argument>--</argument>
-                                <argument>--skipTests=${maven.test.skip}</argument>
                             </arguments>
                         </configuration>
                     </execution>
