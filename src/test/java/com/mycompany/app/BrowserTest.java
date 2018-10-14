@@ -64,6 +64,6 @@ public class BrowserTest {
 
         // assert
         WebElement link = driver.findElement(By.cssSelector("a"));
-        Assert.assertEquals(link.getText(), "Learn React2");
+        Assert.assertEquals(link.getText(), "Learn React");
     }
 }
