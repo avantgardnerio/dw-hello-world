@@ -19,16 +19,16 @@ mvn install
 - [x] [Serve react app as static resource from DropWizard](https://spin.atomicobject.com/2014/10/11/serving-static-assets-with-dropwizard/)
 - [x] Add WebDriver tests with Chrome headless in CircleCI
 - [x] Add CRUD endpoints without database
-- [ ] Make fetch calls from client to DropWizard API
+- [x] Make fetch calls from client to DropWizard API
 - [ ] Add a PostGreSQL database
 - [ ] Add Flyway migrations
 - [ ] Add JDBI ORM
 - [ ] Add API tests in DropWizard
 - [ ] Inject mock dependencies
 - [ ] Add wildcard route in DropWizard
-- [ ] Add redux
+- [x] Add redux
 - [ ] Add redux-first-routing
-- [ ] Add webpack dev server proxy
+- [x] Add webpack dev server proxy
 - [ ] Add shallow component tests
 - [ ] Add redux-thunk
 - [ ] Add fetch-mock for client unit tests

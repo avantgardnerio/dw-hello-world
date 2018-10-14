@@ -1,7 +1,13 @@
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
 
+import {getJobs} from "./actions";
+
 class App extends Component {
+
+    componentDidMount() {
+        this.props.getJobs();
+    }
 
     get jobs() {
         return this.props.jobs.map(job => <li key={job.id}>{job.name}</li>);
@@ -25,4 +31,10 @@ const mapStateToProps = (state) => {
     }
 };
 
-export default connect(mapStateToProps)(App);
+const mapDispatchToProps = (dispatch) => {
+    return {
+        getJobs: () => dispatch(getJobs())
+    }
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(App);
