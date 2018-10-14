@@ -3,7 +3,6 @@ jobs:
   build:
     docker:
     - image: circleci/openjdk:8-jdk
-    - image: circleci/node:10-stretch
     # documented at https://circleci.com/docs/2.0/circleci-images/
     # - image: circleci/postgres:9.4
 
@@ -13,6 +12,13 @@ jobs:
       MAVEN_OPTS: -Xmx3200m
     steps:
     - checkout
+    - run:
+        name: install
+        command: |
+          curl -o- https://raw.githubusercontent.com/creationix/nvm/v0.33.11/install.sh | bash
+          nvm install 10.4
+          nvm use 10.4
+          node --version
     # Download and cache dependencies
     - restore_cache:
         keys:
