@@ -2,3 +2,16 @@ template: Hello, %s!
 defaultName: Stranger
 server:
   rootPath: /api/
+
+database:
+  driverClass: org.postgresql.Driver
+  user: postgres
+  password: password
+  url: jdbc:postgresql://127.0.0.1/jobs
+  validationQuery: "/* MyService Health Check */ SELECT 1"
+  validationQueryTimeout: 3s
+  minSize: 8
+  maxSize: 32
+  evictionInterval: 10s
+  minIdleTime: 1 minute
+  

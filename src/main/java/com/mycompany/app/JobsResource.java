@@ -2,6 +2,7 @@ package com.mycompany.app;
 
 import com.codahale.metrics.annotation.Timed;
 import com.mycompany.app.models.Job;
+import org.jdbi.v3.core.Jdbi;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
@@ -16,13 +17,17 @@ import java.util.Optional;
 public class JobsResource {
     private final String template;
     private final String defaultName;
+    private final Jdbi jdbi;
     private final AtomicLong counter;
     private final List<Job> jobs = Collections.synchronizedList(new ArrayList<>());
+    final JobDAO dao;
 
-    public JobsResource(String template, String defaultName) {
+    public JobsResource(String template, String defaultName, Jdbi jdbi) {
         this.template = template;
         this.defaultName = defaultName;
         this.counter = new AtomicLong();
+        this.jdbi = jdbi;
+        this.dao = jdbi.onDemand(JobDAO.class);
     }
 
     @GET
