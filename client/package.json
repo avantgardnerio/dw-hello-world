@@ -10,7 +10,7 @@
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
-    "prepare-for-maven-war": "rm -rf ../src/main/resources/static && mv build ../src/main/resources/static",
+    "prepare-for-maven-war": "echo -----------war---------- && pwd && whoami && ls -l && rm -rf ../src/main/resources/static && mv build ../src/main/resources/static",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },
