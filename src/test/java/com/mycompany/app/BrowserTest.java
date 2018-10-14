@@ -63,7 +63,7 @@ public class BrowserTest {
         new WebDriverWait(driver, 5).until(presenceOfElementLocated(By.cssSelector(".App")));
 
         // assert
-        WebElement link = driver.findElement(By.cssSelector("a"));
-        Assert.assertEquals(link.getText(), "Learn React");
+        WebElement link = driver.findElement(By.cssSelector("h1"));
+        Assert.assertEquals(link.getText(), "Jobs");
     }
 }
