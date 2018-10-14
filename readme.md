@@ -29,7 +29,7 @@ mvn install
 - [x] Add redux
 - [ ] Add redux-first-routing
 - [x] Add webpack dev server proxy
-- [ ] Add shallow component tests
-- [ ] Add redux-thunk
+- [x] Add shallow component tests
+- [x] Add redux-thunk
 - [ ] Add fetch-mock for client unit tests
   
