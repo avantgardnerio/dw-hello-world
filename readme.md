@@ -21,6 +21,8 @@ mvn install
 - [x] Add CRUD endpoints without database
 - [x] Make fetch calls from client to DropWizard API
 - [ ] Add a PostGreSQL database
+- [ ] Override with test DB during tests
+- [ ] Override dev settings with environment variables
 - [ ] Add Flyway migrations
 - [ ] Add JDBI ORM
 - [ ] Add API tests in DropWizard
