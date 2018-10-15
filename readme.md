@@ -20,8 +20,8 @@ mvn install
 - [x] Add WebDriver tests with Chrome headless in CircleCI
 - [x] Add CRUD endpoints without database
 - [x] Make fetch calls from client to DropWizard API
-- [ ] Add a PostGreSQL database
-- [ ] Override with test DB during tests
+- [x] Add a PostGreSQL database
+- [x] Override with test DB during tests
 - [ ] Override dev settings with environment variables
 - [ ] Add Flyway migrations
 - [ ] Add JDBI ORM
