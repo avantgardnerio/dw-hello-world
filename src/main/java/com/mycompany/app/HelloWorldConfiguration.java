@@ -3,6 +3,7 @@ package com.mycompany.app;
 import io.dropwizard.Configuration;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import io.dropwizard.db.DataSourceFactory;
+import io.dropwizard.flyway.FlywayFactory;
 import org.hibernate.validator.constraints.NotEmpty;
 
 import javax.validation.Valid;
@@ -19,6 +20,10 @@ public class HelloWorldConfiguration extends Configuration {
     @NotNull
     private DataSourceFactory database = new DataSourceFactory();
 
+    @Valid
+    @NotNull
+    private FlywayFactory flyway = new FlywayFactory();
+
     @JsonProperty("database")
     public void setDataSourceFactory(DataSourceFactory factory) {
         this.database = factory;
@@ -27,6 +32,10 @@ public class HelloWorldConfiguration extends Configuration {
     @JsonProperty("database")
     public DataSourceFactory getDataSourceFactory() {
         return database;
+    }
+
+    public FlywayFactory getFlywayFactory() {
+        return flyway;
     }
 
     @JsonProperty

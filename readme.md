@@ -23,7 +23,7 @@ mvn install
 - [x] Add a PostGreSQL database
 - [x] Override with test DB during tests
 - [ ] Override dev settings with environment variables
-- [ ] Add Flyway migrations
+- [x] Add Flyway migrations
 - [ ] Add JDBI ORM
 - [ ] Add API tests in DropWizard
 - [ ] Inject mock dependencies
