@@ -72,7 +72,8 @@ public class HelloWorldApplication extends Application<HelloWorldConfiguration> 
         final JobsResource resource = new JobsResource(
                 config.getTemplate(),
                 config.getDefaultName(),
-                jdbi
+                jdbi,
+                new JobsRepo()
         );
         environment.jersey().register(resource);
 

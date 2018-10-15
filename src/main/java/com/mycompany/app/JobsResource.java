@@ -4,6 +4,7 @@ import com.codahale.metrics.annotation.Timed;
 import com.mycompany.app.models.Job;
 import org.jdbi.v3.core.Jdbi;
 
+import javax.inject.Inject;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import java.util.ArrayList;
@@ -18,15 +19,18 @@ public class JobsResource {
     private final String template;
     private final String defaultName;
     private final Jdbi jdbi;
+    private final JobsRepo jobsRepo;
     private final AtomicLong counter;
     private final List<Job> jobs = Collections.synchronizedList(new ArrayList<>());
     final JobDAO dao;
 
-    public JobsResource(String template, String defaultName, Jdbi jdbi) {
+    @Inject
+    public JobsResource(String template, String defaultName, Jdbi jdbi, JobsRepo jobsRepo) {
         this.template = template;
         this.defaultName = defaultName;
         this.counter = new AtomicLong();
         this.jdbi = jdbi;
+        this.jobsRepo = jobsRepo;
         this.dao = jdbi.onDemand(JobDAO.class);
     }
 
