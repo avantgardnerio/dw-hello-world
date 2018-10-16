@@ -14,4 +14,3 @@ database:
   maxSize: 32
   evictionInterval: 10s
   minIdleTime: 1 minute
-  

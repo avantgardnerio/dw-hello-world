@@ -37,6 +37,7 @@ public class JobsResource {
     @GET
     @Timed
     public List<Job> getAll() {
+        System.out.println("------------" + jobsRepo.getName());
         return jobs;
     }
 

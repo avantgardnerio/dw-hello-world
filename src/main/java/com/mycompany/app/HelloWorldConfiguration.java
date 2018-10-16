@@ -22,10 +22,11 @@ public class HelloWorldConfiguration extends Configuration {
 
     @Valid
     @NotNull
+    @JsonProperty("flyway")
     private FlywayFactory flyway = new FlywayFactory();
 
     @JsonProperty("database")
-    public void setDataSourceFactory(DataSourceFactory factory) {
+    public void setDatabase(DataSourceFactory factory) {
         this.database = factory;
     }
 
@@ -34,6 +35,7 @@ public class HelloWorldConfiguration extends Configuration {
         return database;
     }
 
+    @JsonProperty("flyway")
     public FlywayFactory getFlywayFactory() {
         return flyway;
     }
