@@ -4,6 +4,7 @@
 
 ```bash
 brew cask install chromedriver
+brew install postgresql
 git clone
 mvn install
 ```
