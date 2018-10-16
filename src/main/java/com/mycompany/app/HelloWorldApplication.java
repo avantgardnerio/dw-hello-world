@@ -78,11 +78,6 @@ public class HelloWorldApplication extends Application<HelloWorldConfiguration> 
         environment.jersey().register(resource);
 
         // Save server so we can shut it down later
-        environment.lifecycle().addServerLifecycleListener(new ServerLifecycleListener() {
-            @Override
-            public void serverStarted(Server server) {
-                HelloWorldApplication.this.server  = server;
-            }
-        });
+        environment.lifecycle().addServerLifecycleListener(server -> HelloWorldApplication.this.server  = server);
     }
 }
