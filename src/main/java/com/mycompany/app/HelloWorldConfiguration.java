@@ -30,7 +30,7 @@ public class HelloWorldConfiguration extends Configuration {
     }
 
     @JsonProperty("database")
-    public DataSourceFactory getDataSourceFactory() {
+    public DataSourceFactory getDatabase() {
         return database;
     }
 
