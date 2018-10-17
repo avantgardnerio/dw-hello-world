@@ -24,7 +24,6 @@ import static org.openqa.selenium.support.ui.ExpectedConditions.presenceOfElemen
 public class BrowserTest {
 
     private static WebDriver driver;
-    private static HelloWorldApplication app;
 
     static DropwizardAppRule RULE = new DropwizardAppRule<>(HelloWorldApplication.class, "/example.yml");
 
@@ -56,17 +55,12 @@ public class BrowserTest {
         caps.setCapability(ChromeOptions.CAPABILITY, options);
 
         driver = new ChromeDriver(caps);
-
-        RULE.getApplication().run("server", "/example.yml");
     }
 
     @AfterClass
     public static void teardown() throws Exception {
         driver.close();
         driver = null;
-
-        app.stop();
-        app = null;
     }
 
     @Test
