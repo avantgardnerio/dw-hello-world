@@ -1,6 +1,7 @@
 package com.mycompany.app;
 
 import com.google.inject.AbstractModule;
+import io.dropwizard.testing.junit.DropwizardAppRule;
 import org.junit.*;
 import org.junit.rules.RuleChain;
 import org.openqa.selenium.By;
@@ -25,11 +26,11 @@ public class BrowserTest {
     private static WebDriver driver;
     private static HelloWorldApplication app;
 
-    static GuiceyAppRule RULE = new GuiceyAppRule(HelloWorldApplication.class, "/example.yml");
+    static DropwizardAppRule RULE = new DropwizardAppRule<>(HelloWorldApplication.class, "/example.yml");
 
     @ClassRule
     public static RuleChain chain = RuleChain
-            .outerRule(new GuiceyConfigurationRule((builder) -> builder.modules(new AbstractModule() {
+            .outerRule(new GuiceyConfigurationRule((builder) -> builder.modulesOverride(new AbstractModule() {
                 @Override
                 protected void configure() {
                     bind(JobsRepo.class).to(JobsRepoMock.class);
@@ -56,8 +57,7 @@ public class BrowserTest {
 
         driver = new ChromeDriver(caps);
 
-        app = new HelloWorldApplication();
-        app.run(new String[]{"server", "/example.yml"});
+        RULE.getApplication().run("server", "/example.yml");
     }
 
     @AfterClass

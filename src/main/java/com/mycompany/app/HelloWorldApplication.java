@@ -19,6 +19,15 @@ public class HelloWorldApplication extends Application<HelloWorldConfiguration> 
 
     private Server server;
 
+    public HelloWorldApplication() {
+        System.out.println("App");
+    }
+
+    @Override
+    public void run(String... arguments) throws Exception {
+        super.run(arguments);
+    }
+
     public static void main(String[] args) throws Exception {
         new HelloWorldApplication().run(args);
     }
