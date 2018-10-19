@@ -9,6 +9,8 @@ import io.dropwizard.flyway.FlywayFactory;
 import io.dropwizard.jdbi3.JdbiFactory;
 import io.dropwizard.setup.Bootstrap;
 import io.dropwizard.setup.Environment;
+import io.federecio.dropwizard.swagger.SwaggerBundle;
+import io.federecio.dropwizard.swagger.SwaggerBundleConfiguration;
 import org.eclipse.jetty.server.Server;
 import org.flywaydb.core.Flyway;
 import org.jdbi.v3.core.Jdbi;
@@ -43,9 +45,13 @@ public class HelloWorldApplication extends Application<HelloWorldConfiguration> 
 
     @Override
     public void initialize(Bootstrap<HelloWorldConfiguration> bootstrap) {
+        // serve react
         bootstrap.addBundle(new AssetsBundle("/static/", "/"));
+
+        // get config from src/main/resources
         bootstrap.setConfigurationSourceProvider(new ResourceConfigurationSourceProvider());
 
+        // flyway
         bootstrap.addBundle(new FlywayBundle<HelloWorldConfiguration>() {
             @Override
             public DataSourceFactory getDataSourceFactory(HelloWorldConfiguration configuration) {
@@ -58,6 +64,15 @@ public class HelloWorldApplication extends Application<HelloWorldConfiguration> 
             }
         });
 
+        // swagger
+        bootstrap.addBundle(new SwaggerBundle<HelloWorldConfiguration>() {
+            @Override
+            protected SwaggerBundleConfiguration getSwaggerBundleConfiguration(HelloWorldConfiguration configuration) {
+                return configuration.swaggerBundleConfiguration;
+            }
+        });
+
+        // add routes
         bootstrap.addBundle(GuiceBundle.builder()
                 .enableAutoConfig(getClass().getPackage().getName())
                 .bundles(JdbiBundle.<HelloWorldConfiguration>forDatabase((conf, env) -> conf.getDatabase()))
