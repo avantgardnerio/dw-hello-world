@@ -1,9 +1,9 @@
 package com.mycompany.app;
 
-import org.junit.AfterClass;
-import org.junit.Assert;
-import org.junit.BeforeClass;
-import org.junit.Test;
+import com.google.inject.AbstractModule;
+import io.dropwizard.testing.junit.DropwizardAppRule;
+import org.junit.*;
+import org.junit.rules.RuleChain;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -14,6 +14,8 @@ import org.openqa.selenium.logging.LoggingPreferences;
 import org.openqa.selenium.remote.CapabilityType;
 import org.openqa.selenium.remote.DesiredCapabilities;
 import org.openqa.selenium.support.ui.WebDriverWait;
+import ru.vyarus.dropwizard.guice.test.GuiceyAppRule;
+import ru.vyarus.dropwizard.guice.test.GuiceyConfigurationRule;
 
 import java.util.logging.Level;
 
@@ -22,7 +24,18 @@ import static org.openqa.selenium.support.ui.ExpectedConditions.presenceOfElemen
 public class BrowserTest {
 
     private static WebDriver driver;
-    private static HelloWorldApplication app;
+
+    static DropwizardAppRule RULE = new DropwizardAppRule<>(HelloWorldApplication.class, "/example.yml");
+
+    @ClassRule
+    public static RuleChain chain = RuleChain
+            .outerRule(new GuiceyConfigurationRule((builder) -> builder.modulesOverride(new AbstractModule() {
+                @Override
+                protected void configure() {
+                    bind(JobsRepo.class).to(JobsRepoMock.class);
+                }
+            })))
+            .around(RULE);
 
     @BeforeClass
     public static void setup() throws Exception {
@@ -42,18 +55,12 @@ public class BrowserTest {
         caps.setCapability(ChromeOptions.CAPABILITY, options);
 
         driver = new ChromeDriver(caps);
-
-        app = new HelloWorldApplication();
-        app.run(new String[]{"server", "/example.yml"});
     }
 
     @AfterClass
     public static void teardown() throws Exception {
         driver.close();
         driver = null;
-
-        app.stop();
-        app = null;
     }
 
     @Test

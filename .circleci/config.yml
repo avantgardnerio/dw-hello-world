@@ -24,6 +24,15 @@ jobs:
           npm --version
           echo 'export PATH=$HOME/.nvm/versions/node/v10.4.1/bin/:$PATH' >> $BASH_ENV
     - run:
+        name: install postgresql
+        command: |
+          sudo apt-get update
+          sudo apt-get install -y postgresql
+          sudo sed -i s/peer/trust/g /etc/postgresql/*/main/pg_hba.conf
+          sudo sed -i s/md5/trust/g /etc/postgresql/*/main/pg_hba.conf
+          sudo service postgresql start
+          createdb -U postgres jobs_test
+    - run:
         name: install chrome
         command: |
           sudo apt-get update
@@ -38,10 +47,9 @@ jobs:
         - v1-dependencies-{{ checksum "pom.xml" }}
         # fallback to using the latest cache if no exact match is found
         - v1-dependencies-
-    - run: mvn dependency:go-offline
     - save_cache:
         paths:
         - ~/.m2
         key: v1-dependencies-{{ checksum "pom.xml" }}
     # run tests!
-    - run: mvn verify
+    - run: ./gradlew build

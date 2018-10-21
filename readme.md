@@ -4,6 +4,7 @@
 
 ```bash
 brew cask install chromedriver
+brew install postgresql
 git clone
 mvn install
 ```
@@ -20,8 +21,10 @@ mvn install
 - [x] Add WebDriver tests with Chrome headless in CircleCI
 - [x] Add CRUD endpoints without database
 - [x] Make fetch calls from client to DropWizard API
-- [ ] Add a PostGreSQL database
-- [ ] Add Flyway migrations
+- [x] Add a PostGreSQL database
+- [x] Override with test DB during tests
+- [ ] Override dev settings with environment variables
+- [x] Add Flyway migrations
 - [ ] Add JDBI ORM
 - [ ] Add API tests in DropWizard
 - [ ] Inject mock dependencies
