@@ -7,6 +7,11 @@
 # maven
 dependency-reduced-pom.xml
 
+# gradle
+build/
+target/
+.gradle/
+
 # node
 node_modules/
 package-lock.json
