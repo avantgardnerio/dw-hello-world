@@ -25,9 +25,9 @@ mvn install
 - [x] Override with test DB during tests
 - [ ] Override dev settings with environment variables
 - [x] Add Flyway migrations
-- [ ] Add JDBI ORM
+- [x] Add JDBI ORM
 - [ ] Add API tests in DropWizard
-- [ ] Inject mock dependencies
+- [x] Inject mock dependencies
 - [ ] Add wildcard route in DropWizard
 - [x] Add redux
 - [ ] Add redux-first-routing

@@ -14,6 +14,7 @@ import javax.ws.rs.core.MediaType;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicLong;
 
 @Api
@@ -24,18 +25,18 @@ public class JobsResource {
     private final String defaultName;
     private final Jdbi jdbi;
     private final JobsRepo jobsRepo;
-    private final AtomicLong counter;
+    private final AtomicInteger counter;
     private final List<Job> jobs = Collections.synchronizedList(new ArrayList<>());
-    final JobDAO dao;
+    final JobDao dao;
 
     @Inject
     public JobsResource(String template, String defaultName, Jdbi jdbi, JobsRepo jobsRepo) {
         this.template = template;
         this.defaultName = defaultName;
-        this.counter = new AtomicLong();
+        this.counter = new AtomicInteger();
         this.jdbi = jdbi;
         this.jobsRepo = jobsRepo;
-        this.dao = jdbi.onDemand(JobDAO.class);
+        this.dao = jdbi.onDemand(JobDao.class);
     }
 
     @GET
