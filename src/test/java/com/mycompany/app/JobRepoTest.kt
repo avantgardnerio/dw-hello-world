@@ -41,7 +41,7 @@ class JobRepoTest {
         Assert.assertEquals("Job should save & load", expected, actual)
     }
 
-    fun cancelOne(): Int? {
+    fun cancelOne(doThrow: Boolean): Int? {
         // https://dba.stackexchange.com/questions/69471/postgres-update-limit-1
         val sql = """"
             update job
@@ -62,6 +62,7 @@ class JobRepoTest {
         template!!.inTransaction(TxConfig().level(TransactionIsolationLevel.REPEATABLE_READ)) { h ->
             // http://jdbi.org/#_fluent_api
             id = h.select(sql).mapTo(Int::class.javaPrimitiveType).findOnly()
+            if(doThrow) throw RuntimeException("Kaboom!")
         }
         return id
     }
@@ -74,12 +75,29 @@ class JobRepoTest {
         val idB = jobDao!!.insert(Job(null, "import", "CANCEL_REQUESTED", null, null, null, null, null, Instant.now()))
 
         // exercise
-        val cancelA = cancelOne()
-        val cancelB = cancelOne()
+        val cancelA = cancelOne(false)
+        val cancelB = cancelOne(false)
 
         // assert
         Assert.assertEquals(idA, cancelA)
         Assert.assertEquals(idB, cancelB)
+    }
+
+    @Test
+    fun shouldRollback() {
+        jobDao!!.deleteAll()
+        val id = jobDao!!.insert(Job(null, "import", "CANCEL_REQUESTED", null, null, null, null, null, Instant.now()))
+
+        // exercise
+        try {
+            cancelOne(true)
+        } catch (ex: Exception) {
+            
+        }
+        val job = jobDao!!.getById(id)
+
+        // assert
+        Assert.assertEquals("CANCEL_REQUESTED", job.status)
     }
 
 }
