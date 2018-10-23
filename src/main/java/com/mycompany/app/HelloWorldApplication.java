@@ -1,19 +1,19 @@
 package com.mycompany.app;
 
+import de.spinscale.dropwizard.jobs.Job;
+import de.spinscale.dropwizard.jobs.JobsBundle;
 import io.dropwizard.Application;
 import io.dropwizard.assets.AssetsBundle;
 import io.dropwizard.configuration.ResourceConfigurationSourceProvider;
 import io.dropwizard.db.DataSourceFactory;
 import io.dropwizard.flyway.FlywayBundle;
 import io.dropwizard.flyway.FlywayFactory;
-import io.dropwizard.jdbi3.JdbiFactory;
 import io.dropwizard.setup.Bootstrap;
 import io.dropwizard.setup.Environment;
 import io.federecio.dropwizard.swagger.SwaggerBundle;
 import io.federecio.dropwizard.swagger.SwaggerBundleConfiguration;
 import org.eclipse.jetty.server.Server;
 import org.flywaydb.core.Flyway;
-import org.jdbi.v3.core.Jdbi;
 import ru.vyarus.dropwizard.guice.GuiceBundle;
 import ru.vyarus.guicey.jdbi3.JdbiBundle;
 
@@ -71,6 +71,10 @@ public class HelloWorldApplication extends Application<HelloWorldConfiguration> 
                 return configuration.swaggerBundleConfiguration;
             }
         });
+
+        // quartz
+        Job testJob = new TestJob();
+        bootstrap.addBundle(new JobsBundle(testJob));
 
         // add routes
         bootstrap.addBundle(GuiceBundle.builder()
