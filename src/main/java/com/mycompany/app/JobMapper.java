@@ -11,9 +11,17 @@ public class JobMapper implements RowMapper<Job> {
 
     @Override
     public Job map(ResultSet r, StatementContext ctx) throws SQLException {
-        Job job = new Job();
-        job.setId(r.getInt("id"));
-        job.setName(r.getString("name"));
+        Job job = new Job(
+                r.getInt("id"),
+                r.getString("name"),
+                r.getString("status"),
+                null,
+                null,
+                null,
+                null,
+                null,
+                null
+        );
         return job;
     }
 }
