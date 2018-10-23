@@ -15,7 +15,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
-import java.util.concurrent.atomic.AtomicLong;
 
 @Api
 @Path("/jobs")
@@ -49,7 +48,7 @@ public class JobsResource {
     @POST
     @Timed
     public Job save(Job job) {
-        Job newJob = new Job(counter.incrementAndGet(), job.getName());
+        Job newJob = new Job(counter.incrementAndGet(), job.getName(), null, null, null, null, null, null, null);
         jobs.add(newJob);
         return newJob;
     }

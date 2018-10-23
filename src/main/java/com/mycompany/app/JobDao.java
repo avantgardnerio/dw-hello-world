@@ -12,7 +12,7 @@ import ru.vyarus.guicey.jdbi3.tx.InTransaction;
 // https://www.dropwizard.io/1.3.5/docs/manual/jdbi3.html
 @JdbiRepository
 public interface JobDao {
-    @SqlUpdate("insert into job (name) values (:name) returning id")
+    @SqlUpdate("insert into job (name, status) values (:name, :status) returning id")
     @InTransaction
     @GetGeneratedKeys
     int insert(@BindBean Job job);
