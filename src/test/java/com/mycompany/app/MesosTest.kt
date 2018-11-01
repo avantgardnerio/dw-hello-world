@@ -29,7 +29,7 @@ class MesosTest {
                 .map { Paths.get(it, "mesos-slave") }
                 .find { Files.exists(it) }
         master = Runtime.getRuntime().exec("$masterPath --registry=in_memory --ip=127.0.0.1 --work_dir=/tmp/mesos/master --advertise_ip=127.0.0.1 --hostname=127.0.0.1 --zk=zk://127.0.0.1:2181/mesos")
-        slave = Runtime.getRuntime().exec("$masterPath --master=127.0.0.1:5050 --ip=127.0.0.1 --work_dir=/tmp/mesos/slave --launcher=posix --hostname=127.0.0.1 --advertise_ip=127.0.0.1")
+        slave = Runtime.getRuntime().exec("$slavePath --master=127.0.0.1:5050 --ip=127.0.0.1 --work_dir=/tmp/mesos/slave --launcher=posix --hostname=127.0.0.1 --advertise_ip=127.0.0.1")
     }
 
     @After
