@@ -5,10 +5,12 @@ import com.mesosphere.mesos.rx.java.SinkOperations
 import com.mesosphere.mesos.rx.java.protobuf.ProtobufMesosClientBuilder
 import com.mesosphere.mesos.rx.java.protobuf.SchedulerCalls
 import com.mesosphere.mesos.rx.java.util.UserAgentEntry
+import org.apache.commons.io.FileUtils
 import org.apache.mesos.v1.Protos
 import org.junit.After
 import org.junit.Before
 import org.junit.Test
+import java.io.File
 import java.net.URI
 import java.nio.file.Files
 import java.nio.file.Paths
@@ -21,6 +23,7 @@ class MesosTest {
 
     @Before
     fun setup() {
+        FileUtils.deleteDirectory(File("/tmp/mesos"))
         val path = System.getenv("PATH").split(":") + "/usr/local/sbin"
         val masterPath = path
                 .map { Paths.get(it, "mesos-master") }
@@ -69,7 +72,7 @@ class MesosTest {
                                 //println(offer)
                                 val agentId = offer.agentId
                                 val taskId = UUID.randomUUID().toString()
-                                val task = sleepTask(agentId, taskId, role, 1.0, role, 16.0)
+                                val task = sleepTask(agentId, taskId, role, 0.5, role, 16.0)
                                 val call = sleep(frameworkId, listOf(offer.id), listOf(task))
                                 println("Scheduling $taskId...")
                                 SinkOperations.sink(call, { println("Completed $taskId") }, { err -> println(err) })
