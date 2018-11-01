@@ -1,7 +1,7 @@
 package com.mycompany.app
 
 import com.mesosphere.mesos.rx.java.SinkOperation
-import com.mesosphere.mesos.rx.java.protobuf.ProtoUtils
+import com.mesosphere.mesos.rx.java.SinkOperations
 import com.mesosphere.mesos.rx.java.protobuf.ProtobufMesosClientBuilder
 import com.mesosphere.mesos.rx.java.protobuf.SchedulerCalls
 import com.mesosphere.mesos.rx.java.util.UserAgentEntry
@@ -43,31 +43,107 @@ class MesosTest {
         val mesosUri = URI.create("http://localhost:5050/api/v1/scheduler")
         val role = "*"
         val fwId = UUID.randomUUID().toString()
-        val frameworkID = Protos.FrameworkID.newBuilder().setValue(fwId).build()
+        val frameworkId = Protos.FrameworkID.newBuilder().setValue(fwId).build()
 
         val clientBuilder = ProtobufMesosClientBuilder.schedulerUsingProtos()
                 .mesosUri(mesosUri)
                 .applicationUserAgentEntry { UserAgentEntry("my-app", "1.0") }
 
         val fwInfo = Protos.FrameworkInfo.newBuilder()
-                .setId(frameworkID)
+                .setId(frameworkId)
                 .setUser(Optional.ofNullable(System.getenv("user")).orElse("root")) // https://issues.apache.org/jira/browse/MESOS-3747
                 .setName("myApp")
                 .setFailoverTimeout(0.0)
                 .setRole(role)
                 .build()
-        val subscribeCall = SchedulerCalls.subscribe(frameworkID, fwInfo)
+        val subscribeCall = SchedulerCalls.subscribe(frameworkId, fwInfo)
 
         clientBuilder
                 .subscribe(subscribeCall)
                 .processStream { unicastEvents ->
                     val events = unicastEvents.share()
+                    val acceptor = events
+                            .filter { it.getType() == org.apache.mesos.v1.scheduler.Protos.Event.Type.OFFERS }
+                            .flatMap { rx.Observable.from(it.getOffers().getOffersList()) }
+                            .map { offer ->
+                                //println(offer)
+                                val agentId = offer.agentId
+                                val taskId = UUID.randomUUID().toString()
+                                val task = sleepTask(agentId, taskId, role, 1.0, role, 16.0)
+                                val call = sleep(frameworkId, listOf(offer.id), listOf(task))
+                                println("Scheduling $taskId...")
+                                SinkOperations.sink(call, { println("Completed $taskId") }, { err -> println(err) })
+                            }
+                            .map { Optional.of(it) }
                     val errorLogger = events
                             .doOnNext { e -> println(e) }
                             .map { e -> Optional.empty<SinkOperation<org.apache.mesos.v1.scheduler.Protos.Call>>() }
-                    errorLogger
+                    acceptor
                 }
 
         clientBuilder.build().openStream().await()
     }
+
+    private fun sleep(
+            frameworkId: Protos.FrameworkID,
+            offerIds: List<Protos.OfferID>,
+            tasks: List<Protos.TaskInfo>
+    ): org.apache.mesos.v1.scheduler.Protos.Call {
+        return org.apache.mesos.v1.scheduler.Protos.Call.newBuilder()
+                .setFrameworkId(frameworkId)
+                .setType(org.apache.mesos.v1.scheduler.Protos.Call.Type.ACCEPT)
+                .setAccept(
+                        org.apache.mesos.v1.scheduler.Protos.Call.Accept.newBuilder()
+                                .addAllOfferIds(offerIds)
+                                .addOperations(
+                                        Protos.Offer.Operation.newBuilder()
+                                                .setType(Protos.Offer.Operation.Type.LAUNCH)
+                                                .setLaunch(
+                                                        Protos.Offer.Operation.Launch.newBuilder()
+                                                                .addAllTaskInfos(tasks)
+                                                )
+                                )
+                )
+                .build()
+    }
+
+    private fun sleepTask(
+            agentId: Protos.AgentID,
+            taskId: String,
+            cpusRole: String,
+            cpus: Double,
+            memRole: String,
+            mem: Double
+    ): Protos.TaskInfo {
+        val sleepSeconds = Optional.ofNullable(System.getenv("SLEEP_SECONDS")).orElse("1")
+        return Protos.TaskInfo.newBuilder()
+                .setName(taskId)
+                .setTaskId(
+                        Protos.TaskID.newBuilder()
+                                .setValue(taskId)
+                )
+                .setAgentId(agentId)
+                .setCommand(
+                        Protos.CommandInfo.newBuilder()
+                                .setEnvironment(Protos.Environment.newBuilder()
+                                        .addVariables(
+                                                Protos.Environment.Variable.newBuilder()
+                                                        .setName("SLEEP_SECONDS").setValue(sleepSeconds)
+                                        ))
+                                .setValue("env | sort && sleep \$SLEEP_SECONDS")
+                )
+                .addResources(Protos.Resource.newBuilder()
+                        .setName("cpus")
+                        .setRole(cpusRole)
+                        .setType(Protos.Value.Type.SCALAR)
+                        .setScalar(Protos.Value.Scalar.newBuilder().setValue(cpus)))
+                .addResources(Protos.Resource.newBuilder()
+                        .setName("mem")
+                        .setRole(memRole)
+                        .setType(Protos.Value.Type.SCALAR)
+                        .setScalar(Protos.Value.Scalar.newBuilder().setValue(mem)))
+                .build()
+    }
+
+
 }
