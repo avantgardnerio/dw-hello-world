@@ -3,6 +3,7 @@ package com.mycompany.app;
 import de.spinscale.dropwizard.jobs.Job;
 import de.spinscale.dropwizard.jobs.JobsBundle;
 import io.dropwizard.Application;
+import io.dropwizard.Configuration;
 import io.dropwizard.assets.AssetsBundle;
 import io.dropwizard.configuration.ResourceConfigurationSourceProvider;
 import io.dropwizard.db.DataSourceFactory;
@@ -77,10 +78,11 @@ public class HelloWorldApplication extends Application<HelloWorldConfiguration> 
         bootstrap.addBundle(new JobsBundle(testJob));
 
         // add routes
-        bootstrap.addBundle(GuiceBundle.builder()
+        GuiceBundle<Configuration> bundle = GuiceBundle.builder()
                 .enableAutoConfig(getClass().getPackage().getName())
                 .bundles(JdbiBundle.<HelloWorldConfiguration>forDatabase((conf, env) -> conf.getDatabase()))
-                .build());
+                .build();
+        bootstrap.addBundle(bundle);
     }
 
     @Override
