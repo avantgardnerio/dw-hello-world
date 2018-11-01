@@ -75,10 +75,10 @@ class MesosTest {
                                 SinkOperations.sink(call, { println("Completed $taskId") }, { err -> println(err) })
                             }
                             .map { Optional.of(it) }
-                    val errorLogger = events
+                    val logger = events
                             .doOnNext { e -> println(e) }
                             .map { e -> Optional.empty<SinkOperation<org.apache.mesos.v1.scheduler.Protos.Call>>() }
-                    acceptor
+                    acceptor.mergeWith(logger)
                 }
 
         clientBuilder.build().openStream().await()
