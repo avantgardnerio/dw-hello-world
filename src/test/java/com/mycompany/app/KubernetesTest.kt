@@ -22,10 +22,15 @@ class KubernetesTest {
             println(item.metadata.name)
         }
 
+        val nodes = api.listNode(null, null, null, null, null, null, null, null, null)
+        for (item in nodes.items) {
+            println(item.metadata.name)
+        }
+
         val container = V1Container()
-        container.name = "pi"
-        container.image = "perl"
-        container.command = listOf("perl", "-Mbignum=bpi", "-wle", "print bpi(2000)")
+        container.name = "hello-world-java"
+        container.image = "maven"
+        container.command = listOf("bash", "-c", "mvn dependency:copy -Dartifact=com.github.colorgmi:hello-world-java:1.0 -DoutputDirectory=. && java -jar hello-world-java-1.0.jar")
 
         val podSpec = V1PodSpec()
         podSpec.containers = listOf(container)
@@ -39,7 +44,7 @@ class KubernetesTest {
         jobSpec.backoffLimit = 4
 
         val metaData = V1ObjectMeta()
-        metaData.name = "pi"
+        metaData.name = "hello-world-java"
 
         val job = V1Job()
         job.metadata = metaData
