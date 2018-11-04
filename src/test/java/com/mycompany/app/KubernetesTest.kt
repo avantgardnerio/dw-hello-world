@@ -37,6 +37,15 @@ class KubernetesTest {
                     options, null, null, null, null, null)
             println(item.metadata.name)
         }
+        val oldPods = api.listNamespacedPod("default", null, null, null, null, "job-name=hello-world-java", null, null, null, null)
+        for (item in oldPods.items) {
+            val options = V1DeleteOptions()
+            val status = api.deleteNamespacedPodAsync(
+                    item.metadata.name,
+                    item.metadata.namespace,
+                    options, null, null, null, null, null)
+            println(item.metadata.name)
+        }
 
         while(BatchV1Api().listJobForAllNamespaces(null, null, null, null, null, null, null, null, null).items.size > 0) {
             println("Waiting for jobs to die...")
@@ -80,6 +89,12 @@ class KubernetesTest {
             println("Waiting for jobs to complete...")
             Thread.sleep(500);
             res = BatchV1Api().readNamespacedJobStatus(result.metadata.name, result.metadata.namespace, null)
+        }
+
+        val pods = api.listNamespacedPod(res.metadata.namespace, null, null, null, null, "job-name=${res.metadata.name}", null, null, null, null)
+        for (item in pods.items) {
+            val log = api.readNamespacedPodLog(item.metadata.name, item.metadata.namespace, null, null, null, null, null, null, null, null)
+            println(log)
         }
 
         println("Job completed: ${res}")
