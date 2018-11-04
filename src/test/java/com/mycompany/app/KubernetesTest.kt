@@ -40,13 +40,18 @@ class KubernetesTest {
 
         while(BatchV1Api().listJobForAllNamespaces(null, null, null, null, null, null, null, null, null).items.size > 0) {
             println("Waiting for jobs to die...")
-            Thread.sleep(100);
+            Thread.sleep(500);
         }
+
+        val env = V1EnvVar()
+        env.name = "foo"
+        env.value = "bar"
 
         val container = V1Container()
         container.name = "hello-world-java"
         container.image = "maven"
-        container.command = listOf("bash", "-c", "mvn dependency:copy -Dartifact=com.github.colorgmi:hello-world-java:1.0 -DoutputDirectory=. && java -jar hello-world-java-1.0.jar")
+        container.addEnvItem(env)
+        container.command = listOf("bash", "-c", "printenv && mvn dependency:copy -Dartifact=com.github.colorgmi:hello-world-java:1.0 -DoutputDirectory=. && java -jar hello-world-java-1.0.jar")
 
         val podSpec = V1PodSpec()
         podSpec.containers = listOf(container)
@@ -68,6 +73,16 @@ class KubernetesTest {
 
         val result = BatchV1Api().createNamespacedJob("default", job, null)
         println(result)
+
+        // await completion
+        var res = BatchV1Api().readNamespacedJobStatus(result.metadata.name, result.metadata.namespace, null)
+        while(res.status.completionTime == null) {
+            println("Waiting for jobs to complete...")
+            Thread.sleep(500);
+            res = BatchV1Api().readNamespacedJobStatus(result.metadata.name, result.metadata.namespace, null)
+        }
+
+        println("Job completed: ${res}")
 
     }
 }
