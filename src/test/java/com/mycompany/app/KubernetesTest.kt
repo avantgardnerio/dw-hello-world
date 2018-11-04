@@ -30,11 +30,17 @@ class KubernetesTest {
         val jobs = BatchV1Api().listJobForAllNamespaces(null, null, null, null, null, null, null, null, null)
         for (item in jobs.items) {
             val options = V1DeleteOptions()
-            val status = BatchV1Api().deleteNamespacedJob(
+            // https://github.com/kubernetes-client/java/issues/86
+            val status = BatchV1Api().deleteNamespacedJobAsync(
                     item.metadata.name,
                     item.metadata.namespace,
-                    options, null, null, null, null)
+                    options, null, null, null, null, null)
             println(item.metadata.name)
+        }
+
+        while(BatchV1Api().listJobForAllNamespaces(null, null, null, null, null, null, null, null, null).items.size > 0) {
+            println("Waiting for jobs to die...")
+            Thread.sleep(100);
         }
 
         val container = V1Container()
