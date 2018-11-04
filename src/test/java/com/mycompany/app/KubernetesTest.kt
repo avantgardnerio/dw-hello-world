@@ -27,6 +27,16 @@ class KubernetesTest {
             println(item.metadata.name)
         }
 
+        val jobs = BatchV1Api().listJobForAllNamespaces(null, null, null, null, null, null, null, null, null)
+        for (item in jobs.items) {
+            val options = V1DeleteOptions()
+            val status = BatchV1Api().deleteNamespacedJob(
+                    item.metadata.name,
+                    item.metadata.namespace,
+                    options, null, null, null, null)
+            println(item.metadata.name)
+        }
+
         val container = V1Container()
         container.name = "hello-world-java"
         container.image = "maven"
@@ -52,5 +62,6 @@ class KubernetesTest {
 
         val result = BatchV1Api().createNamespacedJob("default", job, null)
         println(result)
+
     }
 }
