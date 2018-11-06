@@ -4,8 +4,6 @@ import io.kubernetes.client.Configuration;
 import io.kubernetes.client.apis.BatchV1Api
 import io.kubernetes.client.apis.CoreV1Api;
 import io.kubernetes.client.models.*
-import io.kubernetes.client.proto.V1
-import io.kubernetes.client.proto.V1Batch
 import io.kubernetes.client.util.Config;
 import org.junit.Test
 
@@ -13,6 +11,10 @@ import org.junit.Test
 class KubernetesTest {
     @Test
     fun `it should list pods`() {
+
+        System.setOut(System.err)
+        println("test")
+
         val client = Config.defaultClient()
         Configuration.setDefaultApiClient(client)
 
@@ -56,15 +58,29 @@ class KubernetesTest {
         env.name = "foo"
         env.value = "bar"
 
+        // run `minikube mount /Users/bgardner/data:/data` first...
+        val path = V1HostPathVolumeSource()
+        path.path = "/data"
+
+        val volume = V1Volume()
+        volume.name = "data"
+        volume.hostPath = path
+
+        val mount = V1VolumeMount()
+        mount.name = "data"
+        mount.mountPath = "/data"
+
         val container = V1Container()
         container.name = "hello-world-java"
         container.image = "maven"
         container.addEnvItem(env)
-        container.command = listOf("bash", "-c", "printenv && mvn dependency:copy -Dartifact=com.github.colorgmi:hello-world-java:1.0 -DoutputDirectory=. && java -jar hello-world-java-1.0.jar")
+        container.volumeMounts = listOf(mount)
+        container.command = listOf("bash", "-c", "printenv && echo 'hello from docker' >> /data/test.txt && mvn dependency:copy -Dartifact=com.github.colorgmi:hello-world-java:1.0 -DoutputDirectory=. && java -jar hello-world-java-1.0.jar && sleep 5")
 
         val podSpec = V1PodSpec()
         podSpec.containers = listOf(container)
         podSpec.restartPolicy = "Never"
+        podSpec.volumes = listOf(volume)
 
         val template = V1PodTemplateSpec()
         template.spec = podSpec
